@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../deadlines/widgets/deadline_countdown.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -13,6 +14,8 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const DeadlineCountdown(),
+            const SizedBox(height: 8),
             const Text('Welcome 👋', style: TextStyle(fontSize: 18)),
             const SizedBox(height: 12),
             Wrap(
