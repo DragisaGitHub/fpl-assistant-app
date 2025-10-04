@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'providers/players_providers.dart';
+import '../watchlist/watchlist_providers.dart';
 
 class PlayersPage extends ConsumerWidget {
   const PlayersPage({super.key});
@@ -76,7 +77,21 @@ class PlayersPage extends ConsumerWidget {
                         dense: true,
                         title: Text('${p.name} • ${p.team}'),
                         subtitle: Text('${p.position} • £${p.price.toStringAsFixed(1)} • form ${p.form.toStringAsFixed(1)}'),
-                        trailing: _availabilityChip(p.status, p.chance),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              tooltip: 'Watchlist',
+                              icon: Icon(
+                                ref.watch(watchlistIdsProvider).contains(p.id)
+                                    ? Icons.star
+                                    : Icons.star_border,
+                              ),
+                              onPressed: () => ref.read(watchlistIdsProvider.notifier).toggle(p.id),
+                            ),
+                            _availabilityChip(p.status, p.chance),
+                          ],
+                        ),
                       );
                     },
                   );
@@ -92,11 +107,11 @@ class PlayersPage extends ConsumerWidget {
   Widget _availabilityChip(String status, int? chance) {
     switch (status) {
       case 'a':
-        return Chip(label: Text('Fit ${chance == null ? "" : "(${chance}%)"}'));
+        return Chip(label: Text('Fit ${chance == null ? "" : "($chance%)"}'));
       case 'i':
         return const Chip(label: Text('Injured'));
       case 'd':
-        return Chip(label: Text('Doubtful ${chance == null ? "" : "(${chance}%)"}'));
+        return Chip(label: Text('Doubtful ${chance == null ? "" : "($chance%)"}'));
       case 's':
         return const Chip(label: Text('Suspended'));
       default:
