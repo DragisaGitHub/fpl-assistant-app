@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dio/dio.dart';
-import '../../../core/fpl_api.dart';
+
+import '../../../core/di.dart';
 import '../data/fpl_repository.dart';
 
-final dioProvider = Provider<Dio>((ref) => buildDio());
-final fplRepoProvider = Provider<FplRepository>((ref) => FplRepository(ref.watch(dioProvider)));
+final fplRepoProvider = Provider<FplRepository>(
+      (ref) => FplRepository(ref.watch(dioProvider)),
+);
 
 final nextDeadlineProvider = FutureProvider<DateTime?>((ref) async {
   return ref.watch(fplRepoProvider).fetchNextDeadlineUtc();
@@ -20,6 +21,7 @@ Stream<Duration> _countdownStream(DateTime targetUtc) async* {
   }
 }
 
-final countdownProvider = StreamProvider.family<Duration, DateTime>((ref, targetUtc) {
-  return _countdownStream(targetUtc);
-});
+final countdownProvider =
+StreamProvider.autoDispose.family<Duration, DateTime>(
+      (ref, targetUtc) => _countdownStream(targetUtc),
+);
