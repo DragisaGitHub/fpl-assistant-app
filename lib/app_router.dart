@@ -3,6 +3,7 @@ import 'features/home/home_page.dart';
 import 'features/players/players_page.dart';
 import 'features/watchlist/watchlist_page.dart';
 import 'features/settings/settings_page.dart';
+import 'features/injuries/views/injuries_page.dart';
 
 final appRouter = GoRouter(
   routes: [
@@ -25,6 +26,11 @@ final appRouter = GoRouter(
       path: '/settings',
       name: 'settings',
       builder: (context, state) => const SettingsPage(),
+    ),
+    GoRoute(
+      path: '/injuries',
+      name: 'injuries',
+      builder: (ctx, st) => const InjuriesPage(),
     ),
   ],
 );
