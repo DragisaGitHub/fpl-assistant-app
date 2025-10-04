@@ -37,6 +37,11 @@ class HomePage extends StatelessWidget {
                   icon: const Icon(Icons.settings_outlined),
                   label: const Text('Settings'),
                 ),
+                ElevatedButton.icon(
+                  onPressed: () => context.go('/injuries'),
+                  icon: const Icon(Icons.healing),
+                  label: const Text('Injuries'),
+                ),
               ],
             ),
           ],
