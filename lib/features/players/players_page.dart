@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'providers/players_providers.dart';
 import '../watchlist/watchlist_providers.dart';
 
@@ -92,6 +93,7 @@ class PlayersPage extends ConsumerWidget {
                             _availabilityChip(p.status, p.chance),
                           ],
                         ),
+                        onTap: () => context.push('/players/${p.id}'),
                       );
                     },
                   );
