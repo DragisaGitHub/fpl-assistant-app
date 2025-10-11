@@ -5,15 +5,17 @@ import '../../../core/di.dart';
 import '../data/players_repository.dart';
 import '../models/player_vm.dart';
 
-final playersRepoProvider =
-Provider<PlayersRepository>((ref) => PlayersRepository(ref.watch(dioProvider)));
+final playersRepoProvider = Provider<PlayersRepository>(
+  (ref) => PlayersRepository(ref.watch(dioProvider)),
+);
 
-final playersProvider =
-FutureProvider<List<PlayerVm>>((ref) => ref.watch(playersRepoProvider).fetchPlayers());
+final playersProvider = FutureProvider<List<PlayerVm>>(
+  (ref) => ref.watch(playersRepoProvider).fetchPlayers(),
+);
 
-final searchQueryProvider    = StateProvider<String>((ref) => '');
+final searchQueryProvider = StateProvider<String>((ref) => '');
 final positionFilterProvider = StateProvider<String?>((ref) => null);
-final availableOnlyProvider  = StateProvider<bool>((ref) => false);
+final availableOnlyProvider = StateProvider<bool>((ref) => false);
 
 final filteredPlayersProvider = Provider<AsyncValue<List<PlayerVm>>>((ref) {
   final players = ref.watch(playersProvider);
@@ -25,7 +27,11 @@ final filteredPlayersProvider = Provider<AsyncValue<List<PlayerVm>>>((ref) {
     Iterable<PlayerVm> it = list;
     if (q.isNotEmpty) {
       final lq = q.toLowerCase();
-      it = it.where((p) => p.name.toLowerCase().contains(lq) || p.team.toLowerCase().contains(lq));
+      it = it.where(
+        (p) =>
+            p.name.toLowerCase().contains(lq) ||
+            p.team.toLowerCase().contains(lq),
+      );
     }
     if (pos != null) it = it.where((p) => p.position == pos);
     if (onlyAvail) {
@@ -37,5 +43,18 @@ final filteredPlayersProvider = Provider<AsyncValue<List<PlayerVm>>>((ref) {
     }
     final sorted = it.toList()..sort((a, b) => b.form.compareTo(a.form));
     return sorted;
+  });
+});
+
+final playerByIdProvider = Provider.family<AsyncValue<PlayerVm?>, int>((
+  ref,
+  id,
+) {
+  final all = ref.watch(playersProvider);
+  return all.whenData((list) {
+    for (final p in list) {
+      if (p.id == id) return p;
+    }
+    return null;
   });
 });
