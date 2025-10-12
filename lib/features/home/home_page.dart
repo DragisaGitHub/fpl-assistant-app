@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../deadlines/widgets/deadline_countdown.dart';
+import '../auth/auth_providers.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final onboarded = ref.watch(isOnboardedProvider);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.mounted && !onboarded) {
+        context.go('/onboarding');
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(title: const Text('FPL Assistant')),
       body: Padding(
@@ -22,6 +32,11 @@ class HomePage extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
+                ElevatedButton.icon(
+                  onPressed: () => context.go('/my-team'),
+                  icon: const Icon(Icons.sports_soccer),
+                  label: const Text('My Team'),
+                ),
                 ElevatedButton.icon(
                   onPressed: () => context.go('/players'),
                   icon: const Icon(Icons.people_outline),

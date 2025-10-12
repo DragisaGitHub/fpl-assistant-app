@@ -1,17 +1,29 @@
 import 'package:go_router/go_router.dart';
+import 'features/auth/onboarding_page.dart';
 import 'features/home/home_page.dart';
 import 'features/players/players_page.dart';
 import 'features/players/view/player_details_page.dart';
 import 'features/watchlist/watchlist_page.dart';
 import 'features/settings/settings_page.dart';
 import 'features/injuries/views/injuries_page.dart';
+import 'features/my_team/my_team_pitch_page.dart';
 
 final appRouter = GoRouter(
   routes: [
     GoRoute(
+      path: '/onboarding',
+      name: 'onboarding',
+      builder: (context, state) => const OnboardingPage(),
+    ),
+    GoRoute(
       path: '/',
       name: 'home',
       builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/my-team',
+      name: 'my-team',
+      builder: (context, state) => const MyTeamPage(),
     ),
     GoRoute(
       path: '/players',
